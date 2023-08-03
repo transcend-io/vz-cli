@@ -65,4 +65,3 @@ jobs:
           yarn config set npmAuthToken ${{ secrets.NPM_TOKEN }}
       - name: Publish to yarn/npm
         run: yarn npm publish
-
