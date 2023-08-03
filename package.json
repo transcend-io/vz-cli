@@ -2,7 +2,7 @@
   "author": "Transcend Inc.",
   "name": "@transcend-io/vz-cli",
   "description": "Customer Cli",
-  "version": "4.69.0",
+  "version": "1.0.0",
   "homepage": "https://github.com/transcend-io/vz-cli",
   "repository": {
     "type": "git",
