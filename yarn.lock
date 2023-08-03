@@ -514,7 +514,7 @@ __metadata:
     typescript: ^5.0.4
     yargs-parser: ^21.1.1
   bin:
-    tr-combine-legal-csv: ./build/cli-combine-legal-csv.js
+    vz-combine-legal-csv: ./build/cli-combine-legal-csv.js
   languageName: unknown
   linkType: soft
 
