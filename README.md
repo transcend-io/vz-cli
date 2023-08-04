@@ -20,8 +20,6 @@
     - [Arguments](#arguments-1)
     - [Usage](#usage-1)
   - [vz-transform-from-parent-for-children](#vz-transform-from-parent-for-children)
-  - [vz-derive-integrations-from-data-flows](#vz-derive-integrations-from-data-flows)
-  - [vz-derive-per-instance-integrations-from-data-flows](#vz-derive-per-instance-integrations-from-data-flows)
 - [Useful Commands](#useful-commands)
   - [A) Combine Legal CSV with Transcend Data Flows and Cookies](#a-combine-legal-csv-with-transcend-data-flows-and-cookies)
     - [Required Environment Variables](#required-environment-variables)
@@ -90,6 +88,10 @@ yarn vz-combine-legal-csv-data-flows \
    --legalCsv=/Users/test/Desktop/legal.csv \
    --dataFlowExportCsv=/Users/test/Desktop/data-flows.csv \
    --output=/Users/test/Desktop/output.csv
+yarn vz-combine-legal-csv-cookies \
+   --legalCsv=/Users/test/Desktop/legal.csv \
+   --dataFlowExportCsv=/Users/test/Desktop/cookies.csv \
+   --output=/Users/test/Desktop/output.csv
 yarn vz-transcend-from-parent-for-children --file=./transcend.yml
 
 # transcend cli commands available within @transcend-io/cli
@@ -103,6 +105,10 @@ yarn tr-upload-cookies-from-csv --auth=$TRANSCEND_API_KEY --file=./approved-flow
 yarn tr-generate-api-keys --auth=$TRANSCEND_API_KEY --email=test@transcend.io --password=$TRANSCEND_PASSWORD \
    --scopes="View Email Templates,View Data Map" --apiKeyTitle="CLI Usage Cross Instance Sync" -file=./working/auth.json
 yarn tr-build-xdi-sync-endpoint --auth=$TRANSCEND_API_KEY --xdiLocation=https://cdn.your-site.com/xdi.js
+yarn tr-derive-data-silos-from-data-flows --auth=$TRANSCEND_API_KEY --dataFlowsYmlFolder=./working/data-flows/ \
+   --dataSilosYmlFolder=./working/data-silos/ --ignoreYmls="0 - Data Mapping.yml"
+yarn tr-derive-data-silos-from-data-flows-cross-instance --auth=$TRANSCEND_API_KEY
+   --dataFlowsYmlFolder=./working/data-flows/ --output=./transcend.yml
 ```
 
 _The cli-commands default to using the EU Transcend backend. To use these commands with the US backend, you will need to use the flag You can also set the environment variable `TRANSCEND_API_URL=https://api.us.transcend.io`_
@@ -178,14 +184,6 @@ Remove data from the `0 - Data Mapping` `transcend.yml` output that should not b
 ```sh
 yarn vz-transcend-from-parent-for-children --file=./transcend.yml
 ```
-
-### vz-derive-integrations-from-data-flows
-
-FIXME
-
-### vz-derive-per-instance-integrations-from-data-flows
-
-FIXME
 
 ## Useful Commands
 
@@ -333,7 +331,7 @@ export TRANSCEND_YAML_FOLDER=./working/output/
 export TRANSCEND_API_KEYS_PATH=./working/api-keys.json
 rm -rf $TRANSCEND_YAML_FOLDER
 yarn tr-pull --auth=$TRANSCEND_API_KEYS_PATH --file=$TRANSCEND_YAML_FOLDER --resources=consentManager
-yarn vz-consent-manager-configuration-to-summary --transcendYmlFolder=$TRANSCEND_YAML_FOLDER --output=$COMBINED_TRANSCEND_BUSINESS_ENTITIES
+yarn tr-consent-managers-to-business-entities --transcendYmlFolder=$TRANSCEND_YAML_FOLDER --output=$COMBINED_TRANSCEND_BUSINESS_ENTITIES
 yarn tr-push --auth=$TRANSCEND_API_KEY --file=$COMBINED_TRANSCEND_BUSINESS_ENTITIES
 ```
 
@@ -375,9 +373,28 @@ Create a single export of ad tech and site tech across all Transcend instances.
 3. Produce a single `transcend.yml` file with the full set of all Data Silos found from each data flow and cookie
 4. Load the `transcend.yml` into the `0 - Data Mapping` Transcend instance.
 
-FIXME
+```sh
+export TRANSCEND_API_URL=https://api.us.transcend.io
+export TRANSCEND_API_KEYS_PATH=./working/api-keys.json
+export TRANSCEND_DATA_FLOWS_YAML_FOLDER=./working/data-flows/
+export TRANSCEND_DATA_SILOS_YAML_FILE=./working/data-silos.yml
+export TRANSCEND_IGNORE_YMLS="0 - Data Mapping.yml"
+export TRANSCEND_API_KEY=SECRET_FILL_ME
+yarn tr-pull --auth=$TRANSCEND_API_KEYS_PATH --file=$TRANSCEND_DATA_FLOWS_YAML_FOLDER --resources=dataFlows --trackerStatuses=LIVE
+yarn tr-derive-data-silos-from-data-flows-cross-instance --auth=$TRANSCEND_API_KEY --dataFlowsYmlFolder=$TRANSCEND_DATA_FLOWS_YAML_FOLDER --output=$TRANSCEND_DATA_SILOS_YAML_FILE --ignoreYmls=$TRANSCEND_IGNORE_YMLS
+yarn tr-push --auth=$TRANSCEND_API_KEY --file=$TRANSCEND_DATA_SILOS_YAML_FOLDER
+```
 
 #### Required Environment Variables
+
+| Argument                           | Description                                                                                                                                             | Type                 | Is Secret                                                |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | -------------------------------------------------------- |
+| `TRANSCEND_API_URL`                | Transcend backend URL                                                                                                                                   | string - url         | false                                                    |
+| `TRANSCEND_API_KEYS_PATH`          | Path to the JSON file holding the API keys for each instance. This file can be created in section "Generate API keys to Synchronize Cross-Account Data" | string - file-path   | false - file contents are secret (should be git-ignored) |
+| `TRANSCEND_DATA_FLOWS_YAML_FOLDER` | The folder to write the set of data flow configurations                                                                                                 | string - folder-path | false                                                    |
+| `TRANSCEND_DATA_SILOS_YAML_FILE`   | The file to write the set of data silo configurations to                                                                                                | string - file-path   | false                                                    |
+| `TRANSCEND_IGNORE_YMLS`            | The yml files that should not be synced                                                                                                                 | string[]             | false                                                    |
+| `TRANSCEND_API_KEY`                | Transcend API key with `Manage Data Map` permission for the instance to upload the `TRANSCEND_DATA_SILOS_YAML_FILE` file to                             | string - api-key     | true                                                     |
 
 ### I) Generate Per-Instance List of Ad Tech Data Silos
 
@@ -386,9 +403,28 @@ FIXME
 3. Produce a new `transcend.yml` file containing the full set of all Data Silos found from in each instance
 4. Load each `transcend.yml` into each respective Transcend instance
 
-FIXME
+```sh
+export TRANSCEND_API_URL=https://api.us.transcend.io
+export TRANSCEND_API_KEYS_PATH=./working/api-keys.json
+export TRANSCEND_DATA_FLOWS_YAML_FOLDER=./working/data-flows/
+export TRANSCEND_DATA_SILOS_YAML_FOLDER=./working/data-silos/
+export TRANSCEND_IGNORE_YMLS="0 - Data Mapping.yml"
+export TRANSCEND_API_KEY=SECRET_FILL_ME
+yarn tr-pull --auth=$TRANSCEND_API_KEYS_PATH --file=$TRANSCEND_DATA_FLOWS_YAML_FOLDER --resources=dataFlows --trackerStatuses=LIVE
+yarn tr-derive-data-silos-from-data-flows --auth=$TRANSCEND_API_KEY --dataFlowsYmlFolder=$TRANSCEND_DATA_FLOWS_YAML_FOLDER --dataSilosYmlFolder=$TRANSCEND_DATA_SILOS_YAML_FOLDER --ignoreYmls=$TRANSCEND_IGNORE_YMLS
+yarn tr-push --auth=$TRANSCEND_API_KEYS_PATH --file=$TRANSCEND_DATA_SILOS_YAML_FOLDER
+```
 
 #### Required Environment Variables
+
+| Argument                           | Description                                                                                                                                             | Type                 | Is Secret                                                |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | -------------------------------------------------------- |
+| `TRANSCEND_API_URL`                | Transcend backend URL                                                                                                                                   | string - url         | false                                                    |
+| `TRANSCEND_API_KEYS_PATH`          | Path to the JSON file holding the API keys for each instance. This file can be created in section "Generate API keys to Synchronize Cross-Account Data" | string - file-path   | false - file contents are secret (should be git-ignored) |
+| `TRANSCEND_DATA_FLOWS_YAML_FOLDER` | The folder to write the set of data flow configurations                                                                                                 | string - folder-path | false                                                    |
+| `TRANSCEND_DATA_SILOS_YAML_FOLDER` | The folder to write the set of data silo configurations                                                                                                 | string - folder-path | false                                                    |
+| `TRANSCEND_IGNORE_YMLS`            | The yml files that should not be synced                                                                                                                 | string[]             | false                                                    |
+| `TRANSCEND_API_KEY`                | Any Transcend API key across any instance. No scope required                                                                                            | string - api-key     | true                                                     |
 
 ### J) Update the Consent Manager to Latest Cross-Instance
 
