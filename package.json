@@ -11,6 +11,7 @@
   "license": "MIT",
   "main": "build/index",
   "bin": {
+    "vz-combine-legal-csv-cookies": "./build/cli-combine-legal-csv-cookies.js",
     "vz-combine-legal-csv-data-flows": "./build/cli-combine-legal-csv-data-flows.js",
     "vz-transcend-from-parent-for-children": "./build/cli-transcend-from-parent-for-children.js"
   },
@@ -45,7 +46,7 @@
   },
   "packageManager": "yarn@3.5.0",
   "dependencies": {
-    "@transcend-io/cli": "^4.73.0",
+    "@transcend-io/cli": "^4.74.0",
     "colors": "^1.4.0",
     "fp-ts": "=2.11.8",
     "io-ts": "=2.2.16",
