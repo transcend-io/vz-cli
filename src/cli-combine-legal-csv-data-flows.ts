@@ -10,18 +10,16 @@ import { LegalTrackerCsvCodec } from './codecs';
 /**
  * Combines information in a CSV from a legal team into a CSV of data flow data
  *
- * yarn ts-node ./src/cli-combine-legal-csv.ts \
+ * yarn ts-node ./src/cli-combine-legal-csv-data-flows.ts \
  *   --legalCsv=/Users/michaelfarrell/Desktop/legal.csv \
  *   --dataFlowExportCsv=/Users/michaelfarrell/Desktop/data-flows.csv
  *   --output=/Users/michaelfarrell/Desktop/output.csv
  *
  * Standard usage:
- * yarn vz-combine-legal-csv \
+ * yarn vz-combine-legal-csv-data-flows \
  *   --legalCsv=/Users/michaelfarrell/Desktop/legal.csv \
- *   --dataFlowExportCsv=/Users/michaelfarrell/Desktop/data-flows.csv
+ *   --dataFlowExportCsv=/Users/michaelfarrell/Desktop/data-flows.csv \
  *   --output=/Users/michaelfarrell/Desktop/output.csv
- *
- * @deprecated - This function should not be merged, it is useful for a single customer
  */
 function main(): void {
   // Parse command line arguments

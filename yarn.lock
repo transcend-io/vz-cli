@@ -397,9 +397,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@transcend-io/cli@npm:^4.70.0":
-  version: 4.70.0
-  resolution: "@transcend-io/cli@npm:4.70.0"
+"@transcend-io/cli@npm:^4.71.0":
+  version: 4.71.0
+  resolution: "@transcend-io/cli@npm:4.71.0"
   dependencies:
     "@transcend-io/airgap.js-types": ^9.2.0
     "@transcend-io/internationalization": ^1.6.0
@@ -446,7 +446,7 @@ __metadata:
     tr-skip-request-data-silos: ./build/cli-skip-request-data-silos.js
     tr-update-consent-manager: ./build/cli-update-consent-manager-to-latest.js
     tr-upload-data-flows-from-csv: ./build/cli-upload-data-flows-from-csv.js
-  checksum: 6f01c4b215f2a9ae659bb7a3fe850e02b7738971a663f450c6004ccb755f4bdeb2d4fd344df2ba3050ed9dc506c2d2fd5c142f20ed28b61492641466fa960f1c
+  checksum: caf24c91cb4ffe6f6f2100c1963e3bd6ad284e54f51709deb61e397b4218f39fd647c20debfc9cdc243ac1deb466fdf9d9b1537739a8c0e34e6abcc563a20638
   languageName: node
   linkType: hard
 
@@ -493,7 +493,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@transcend-io/vz-cli@workspace:."
   dependencies:
-    "@transcend-io/cli": ^4.70.0
+    "@transcend-io/cli": ^4.71.0
     "@types/node": ^18.15.11
     "@types/yargs-parser": ^21
     "@typescript-eslint/eslint-plugin": ^5.58.0
