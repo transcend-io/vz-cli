@@ -20,6 +20,9 @@
     - [Arguments](#arguments-1)
     - [Usage](#usage-1)
   - [vz-transform-from-parent-for-children](#vz-transform-from-parent-for-children)
+    - [Authentication](#authentication-2)
+    - [Arguments](#arguments-2)
+    - [Usage](#usage-2)
 - [Useful Commands](#useful-commands)
   - [A) Combine Legal CSV with Transcend Data Flows and Cookies](#a-combine-legal-csv-with-transcend-data-flows-and-cookies)
     - [Required Environment Variables](#required-environment-variables)
@@ -180,6 +183,18 @@ yarn vz-combine-legal-csv-cookies \
 ### vz-transform-from-parent-for-children
 
 Remove data from the `0 - Data Mapping` `transcend.yml` output that should not be synced to the other child Transcend instances.
+
+#### Authentication
+
+No authentication is required to run this cli command, it operates on a YML file on disk
+
+#### Arguments
+
+| Argument | Description                  | Type               | Default         | Required |
+| -------- | ---------------------------- | ------------------ | --------------- | -------- |
+| file     | Path to `transcend.yml` file | string - file-path | ./transcend.yml | false    |
+
+#### Usage
 
 ```sh
 yarn vz-transcend-from-parent-for-children --file=./transcend.yml
