@@ -46,7 +46,7 @@
   },
   "packageManager": "yarn@3.5.0",
   "dependencies": {
-    "@transcend-io/cli": "^4.74.0",
+    "@transcend-io/cli": "^4.75.0",
     "colors": "^1.4.0",
     "fp-ts": "=2.11.8",
     "io-ts": "=2.2.16",
