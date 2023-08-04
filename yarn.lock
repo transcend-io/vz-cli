@@ -515,6 +515,7 @@ __metadata:
     yargs-parser: ^21.1.1
   bin:
     vz-combine-legal-csv-data-flows: ./build/cli-combine-legal-csv-data-flows.js
+    vz-transcend-from-parent-for-children: ./build/cli-transcend-from-parent-for-children.js
   languageName: unknown
   linkType: soft
 

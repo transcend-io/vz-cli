@@ -5,6 +5,10 @@
 
 - [Overview](#overview)
 - [Installation](#installation)
+  - [Step 1) Install NPM, Node, and Yarn](#step-1-install-npm-node-and-yarn)
+  - [Step 2) Install @transcend-io/vz-cli and @transcend-io/cli](#step-2-install-transcend-iovz-cli-and-transcend-iocli)
+  - [Step 3) Create a .env file to store secrets and common environment configuration](#step-3-create-a-env-file-to-store-secrets-and-common-environment-configuration)
+  - [Step 4) Run commands](#step-4-run-commands)
 - [Transcend CLI](#transcend-cli)
 - [Custom Commands](#custom-commands)
   - [vz-combine-legal-csv-data-flows](#vz-combine-legal-csv-data-flows)
@@ -14,36 +18,29 @@
   - [vz-combine-legal-csv-cookies](#vz-combine-legal-csv-cookies)
   - [vz-transform-from-parent-for-children](#vz-transform-from-parent-for-children)
   - [vz-consent-manager-configuration-to-summary](#vz-consent-manager-configuration-to-summary)
-  - [vz-consent-manager-configuration-to-summary](#vz-consent-manager-configuration-to-summary-1)
   - [vz-derive-integrations-from-data-flows](#vz-derive-integrations-from-data-flows)
   - [vz-derive-per-instance-integrations-from-data-flows](#vz-derive-per-instance-integrations-from-data-flows)
 - [Useful Commands](#useful-commands)
-  - [A) Combine Legal CSV with Transcend Data Flows](#a-combine-legal-csv-with-transcend-data-flows)
+  - [A) Combine Legal CSV with Transcend Data Flows and Cookies](#a-combine-legal-csv-with-transcend-data-flows-and-cookies)
     - [Required Environment Variables](#required-environment-variables)
-  - [B) Combine Legal CSV with Transcend Cookies](#b-combine-legal-csv-with-transcend-cookies)
+  - [B) Generate API keys to Synchronize Cross-Account Data](#b-generate-api-keys-to-synchronize-cross-account-data)
     - [Required Environment Variables](#required-environment-variables-1)
-  - [C) Generate API keys to Synchronize Cross-Account Data](#c-generate-api-keys-to-synchronize-cross-account-data)
+  - [C) Delete API Keys Cross-Account](#c-delete-api-keys-cross-account)
     - [Required Environment Variables](#required-environment-variables-2)
-  - [D) Delete API Keys Cross-Account](#d-delete-api-keys-cross-account)
+  - [D) Sync Shared Configuration from `0 - Data Mapping` Across All Accounts](#d-sync-shared-configuration-from-0---data-mapping-across-all-accounts)
     - [Required Environment Variables](#required-environment-variables-3)
-  - [E) Pull Shared Configuration from `0 - Data Mapping` Account](#e-pull-shared-configuration-from-0---data-mapping-account)
+  - [E) Pull a `transcend.yml` for Each Instance](#e-pull-a-transcendyml-for-each-instance)
     - [Required Environment Variables](#required-environment-variables-4)
-  - [F) Transform `transcend.yml` to Remove Non-Syncing Fields](#f-transform-transcendyml-to-remove-non-syncing-fields)
+  - [F) Combining Configurations Cross-Instances into the `0 - Data Mapping` -> `Data Inventory` -> `Business Entities` table](#f-combining-configurations-cross-instances-into-the-0---data-mapping---data-inventory---business-entities-table)
     - [Required Environment Variables](#required-environment-variables-5)
-  - [G) Push a `transcend.yml` to All Accounts](#g-push-a-transcendyml-to-all-accounts)
+  - [G) Pull Down Approved Data Flows to YAML Cross-Account](#g-pull-down-approved-data-flows-to-yaml-cross-account)
     - [Required Environment Variables](#required-environment-variables-6)
-  - [H) Pull a `transcend.yml` for Each Instance](#h-pull-a-transcendyml-for-each-instance)
+  - [H) Generate Cross-Instance List of Ad Tech & Site Tech](#h-generate-cross-instance-list-of-ad-tech--site-tech)
     - [Required Environment Variables](#required-environment-variables-7)
-  - [I) Combining Configuration Cross-Instances into the `0 - Data Mapping` -> `Data Inventory` -> `Business Entities` table](#i-combining-configuration-cross-instances-into-the-0---data-mapping---data-inventory---business-entities-table)
+  - [I) Generate Per-Instance List of Ad Tech Data Silos](#i-generate-per-instance-list-of-ad-tech-data-silos)
     - [Required Environment Variables](#required-environment-variables-8)
-  - [J) Pull Down Approved Data Flows to YAML Cross-Account](#j-pull-down-approved-data-flows-to-yaml-cross-account)
+  - [J) Update the Consent Manager to Latest Cross-Instance](#j-update-the-consent-manager-to-latest-cross-instance)
     - [Required Environment Variables](#required-environment-variables-9)
-  - [K) Generate Cross-Instance List of Ad Tech & Site Tech](#k-generate-cross-instance-list-of-ad-tech--site-tech)
-    - [Required Environment Variables](#required-environment-variables-10)
-  - [L) Generate Per-Instance List of Ad Tech Data Silos](#l-generate-per-instance-list-of-ad-tech-data-silos)
-    - [Required Environment Variables](#required-environment-variables-11)
-  - [M) Update the Consent Manager to Latest Cross-Instance](#m-update-the-consent-manager-to-latest-cross-instance)
-    - [Required Environment Variables](#required-environment-variables-12)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -53,7 +50,11 @@ A command line interface that allows you to define your Data Map in code and syn
 
 ## Installation
 
-This package is distributed through npm and github package registries and assumes an installation of [npm and node](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
+### Step 1) Install NPM, Node, and Yarn
+
+This package is distributed through npm and github package registries and assumes an installation of [npm and node](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm). You will also want to install [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable).
+
+### Step 2) Install @transcend-io/vz-cli and @transcend-io/cli
 
 If your codebase is typescript or javascript based, you can add this package as a dev dependency:
 
@@ -63,24 +64,38 @@ yarn add -D @transcend-io/vz-cli
 
 # install the transcend cli as well
 yarn add -D @transcend-io/cli
+```
 
-# default the cli to use US backend
-export TRANSCEND_API_URL=https://api.us.transcend.io
+### Step 3) Create a .env file to store secrets and common environment configuration
 
-# load in API key from a secret file
-export TRANSCEND_API_KEY=FILL_ME
+Create a .env file with variables like this:
 
-# vz cli commands available within package
+```.sh
+TRANSCEND_API_KEY=FILL_ME
+TRANSCEND_API_URL=https://api.us.transcend.io
+```
+
+The `TRANSCEND_API_KEY` is a secret, and this should not be committed to git or pasted into your terminal history. If you do either of these, the API key can be cycled [in the Transcend Dashboard](https://app.transcend.io/infrastructure/api-keys).
+
+### Step 4) Run commands
+
+```sh
+# load in .env file
+source .env
+
+# vz cli commands available within @transcend-io/vz-cli
 yarn vz-combine-legal-csv-data-flows \
    --legalCsv=/Users/test/Desktop/legal.csv \
    --dataFlowExportCsv=/Users/test/Desktop/data-flows.csv \
    --output=/Users/test/Desktop/output.csv
+yarn vz-transcend-from-parent-for-children --file=./transcend.yml
 
-# transcend cli commands available within package
+# transcend cli commands available within @transcend-io/cli
 yarn tr-pull --auth=$TRANSCEND_API_KEY --resources=consentManager,dataFlows,cookies
 yarn tr-push --auth=$TRANSCEND_API_KEY
 yarn tr-update-consent-manager --auth=$TRANSCEND_API_KEY
 yarn tr-pull-consent-metrics --auth=$TRANSCEND_API_KEY --start=01/01/2023
+yarn tr-consent-managers-to-business-entities --consentManagerYmlFolder=./working/consent-managers/ --output=./custom.yml
 yarn tr-upload-data-flows-from-csv --auth=$TRANSCEND_API_KEY --file=./approved-flows.csv --trackerStatus=LIVE
 yarn tr-generate-api-keys --auth=$TRANSCEND_API_KEY --email=test@transcend.io --password=$TRANSCEND_PASSWORD \
    --scopes="View Email Templates,View Data Map" --apiKeyTitle="CLI Usage Cross Instance Sync" -file=./working/auth.json
@@ -132,40 +147,11 @@ FIXME add tr-upload-cookies-csv
 
 ### vz-transform-from-parent-for-children
 
-FIXME
+Remove data from the `0 - Data Mapping` `transcend.yml` output that should not be synced to the other child Transcend instances.
 
-```ts
-import { readTranscendYaml, writeTranscendYaml } from '@transcend-io/cli';
-
-const { TRANSCEND_YAML = './transcend.yml' } = process.env;
-
-// Read in contents
-const transcend = readTranscendYaml(TRANSCEND_YAML);
-
-// Remove anything that should not be synced
-if (transcend['consent-manager']) {
-  delete transcend['consent-manager'].domains;
-}
-
-// business entity attributes do not need to sync
-if (transcend.attributes) {
-  transcend.attributes = transcend.attributes
-    .map((attr) => ({
-      ...attr,
-      resources: attr.resources?.filter(
-        (resource) => resource !== 'businessEntity',
-      ),
-    }))
-    .filter((attr) => attr.resources && attr.resources.length > 0);
-}
-
-// write to disk
-writeTranscendYaml(TRANSCEND_YAML, transcend);
+```sh
+yarn vz-transcend-from-parent-for-children --file=./transcend.yml
 ```
-
-### vz-consent-manager-configuration-to-summary
-
-FIXME
 
 ### vz-consent-manager-configuration-to-summary
 
@@ -181,7 +167,7 @@ FIXME
 
 ## Useful Commands
 
-### A) Combine Legal CSV with Transcend Data Flows
+### A) Combine Legal CSV with Transcend Data Flows and Cookies
 
 Combine legal's categorizations of vendors, combine those categorizations with what was in Transcend, and push those categorizations back into Transcend.
 
@@ -189,16 +175,22 @@ Step 1) Download the CSV of data flows that you want to edit from the Admin Dash
 
 <img width="1464" alt="Screenshot 2023-06-22 at 6 05 36 PM" src="https://github.com/transcend-io/cli/assets/10264973/c4b65b31-2cf3-49c9-b543-041567c7aff8">
 
-Step 2) Run CLI commands:
+Step 2) Download the CSV of cookies that you want to edit from the Admin Dashboard under [Consent Manager -> Cookies](https://app.transcend.io/consent-manager/cookies). You can download data flows from both the "Triage" and "Approved" tabs.
+
+Step 3) Run CLI commands:
 
 ```sh
 export TRANSCEND_API_URL=https://api.us.transcend.io
 export LEGAL_FILE=/Users/test/Desktop/legal.csv
 export TRANSCEND_DATA_FLOWS_FILE=/Users/test/Desktop/data-flows.csv
 export COMBINED_TRANSCEND_DATA_FLOWS_FILE=/Users/test/Desktop/data-flows.csv
+export TRANSCEND_COOKIES_FILE=/Users/test/Desktop/cookies.csv
+export COMBINED_TRANSCEND_COOKIES_FILE=/Users/test/Desktop/cookies.csv
 export TRANSCEND_API_KEY=SECRET_FILL_ME
 yarn vz-combine-legal-csv-data-flows --legalCsv=$LEGAL_FILE --dataFlowExportCsv=$TRANSCEND_DATA_FLOWS_FILE --output=$COMBINED_TRANSCEND_DATA_FLOWS_FILE
+yarn vz-combine-legal-csv-cookies --legalCsv=$LEGAL_FILE --dataFlowExportCsv=$TRANSCEND_COOKIES_FILE --output=$COMBINED_TRANSCEND_DATA_FLOWS_FILE
 yarn tr-upload-data-flows-from-csv --auth=$TRANSCEND_API_KEY --file=$COMBINED_TRANSCEND_DATA_FLOWS_FILE --trackerStatus=LIVE
+yarn tr-upload-data-flows-from-csv --auth=$TRANSCEND_API_KEY --file=$COMBINED_TRANSCEND_COOKIES_FILE --trackerStatus=LIVE
 ```
 
 #### Required Environment Variables
@@ -208,38 +200,12 @@ yarn tr-upload-data-flows-from-csv --auth=$TRANSCEND_API_KEY --file=$COMBINED_TR
 | `LEGAL_FILE`                         | Custom Legal CSV file. File format defined by [`LegalTrackerCsvCodec`](https://github.com/transcend-io/vz-cli/blob/757b42301116b551d0a927944e3c4407a802a9de/src/codecs.ts#L6)              | string - file-path | false     |
 | `TRANSCEND_DATA_FLOWS_FILE`          | Export of data flows from the Transcend dashboard. File format defined by [`DataFlowCsvInput`](https://github.com/transcend-io/cli/blob/main/src/codecs.ts#L821C14-L847)                   | string - file-path | false     |
 | `COMBINED_TRANSCEND_DATA_FLOWS_FILE` | Output file format that can be re-imported into Transcend dashboard. File format defined by [`DataFlowCsvInput`](https://github.com/transcend-io/cli/blob/main/src/codecs.ts#L821C14-L847) | string - file-path | false     |
+| `TRANSCEND_COOKIES_FILE`             | Export of cookies from the Transcend dashboard. File format defined by [`CookieCsvInput`](FIXME)                                                                                           | string - file-path | false     |
+| `COMBINED_TRANSCEND_COOKIES_FILE`    | Output file format that can be re-imported into Transcend dashboard. File format defined by [`CookieCsvInput`](FIXME)                                                                      | string - file-path | false     |
 | `TRANSCEND_API_URL`                  | Transcend backend URL                                                                                                                                                                      | string - url       | false     |
 | `TRANSCEND_API_KEY`                  | Transcend API key with scopes `Manage Cookies`                                                                                                                                             | string - api-key   | true      |
 
-### B) Combine Legal CSV with Transcend Cookies
-
-Combine legal's categorizations of vendors, combine those categorizations with what was in Transcend, and push those categorizations back into Transcend.
-
-Step 1) Download the CSV of data flows that you want to edit from the Admin Dashboard under [Consent Manager -> Cookies](https://app.transcend.io/consent-manager/cookies). You can download cookies from both the "Triage" and "Approved" tabs.
-
-Step 2) Run CLI commands:
-
-```sh
-export TRANSCEND_API_URL=https://api.us.transcend.io
-export LEGAL_FILE=/Users/test/Desktop/legal.csv
-export TRANSCEND_COOKIES_FILE=/Users/test/Desktop/cookies.csv
-export COMBINED_TRANSCEND_COOKIES_FILE=/Users/test/Desktop/cookies.csv
-export TRANSCEND_API_KEY=SECRET_FILL_ME
-yarn vz-combine-legal-csv-cookies --legalCsv=$LEGAL_FILE --dataFlowExportCsv=$TRANSCEND_COOKIES_FILE --output=$COMBINED_TRANSCEND_DATA_FLOWS_FILE
-yarn tr-upload-cookies-from-csv --auth=$TRANSCEND_API_KEY --file=$COMBINED_TRANSCEND_COOKIES_FILE --trackerStatus=LIVE
-```
-
-#### Required Environment Variables
-
-| Argument                          | Description                                                                                                                                                                   | Type               | Is Secret |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | --------- |
-| `LEGAL_FILE`                      | Custom Legal CSV file. File format defined by [`LegalTrackerCsvCodec`](https://github.com/transcend-io/vz-cli/blob/757b42301116b551d0a927944e3c4407a802a9de/src/codecs.ts#L6) | string - file-path | false     |
-| `TRANSCEND_COOKIES_FILE`          | Export of cookies from the Transcend dashboard. File format defined by [`CookieCsvInput`](FIXME)                                                                              | string - file-path | false     |
-| `COMBINED_TRANSCEND_COOKIES_FILE` | Output file format that can be re-imported into Transcend dashboard. File format defined by [`CookieCsvInput`](FIXME)                                                         | string - file-path | false     |
-| `TRANSCEND_API_URL`               | Transcend backend URL                                                                                                                                                         | string - url       | false     |
-| `TRANSCEND_API_KEY`               | Transcend API key with scopes `Manage Cookies`                                                                                                                                | string - api-key   | true      |
-
-### C) Generate API keys to Synchronize Cross-Account Data
+### B) Generate API keys to Synchronize Cross-Account Data
 
 This command will generate a JSON file (at ./working/api-keys.json) containing a list of API Keys for each Transcend instance. The API keys have the minimal set of permissions required to synchronize data across all Transcend instances for your account. Each API key will have the same title. These API keys will be available under Infrastructure -> API Keys.
 
@@ -262,7 +228,7 @@ yarn tr-generate-api-keys --email=$TRANSCEND_EMAIL --password=$TRANSCEND_PASSWOR
 | `TRANSCEND_EMAIL`                  | Your email address that you use to log into Transcend                                                                                               | string - email     | false                              |
 | `TRANSCEND_PASSWORD`               | The password you use to log into Transcend                                                                                                          | string - password  | true                               |
 
-### D) Delete API Keys Cross-Account
+### C) Delete API Keys Cross-Account
 
 If you need to delete the API keys generated by the above command, this command can be run to delete API keys across all instances that have a specific title. If you decide to run any cli commands on a CI, you can use these commands to establish a process to cycle API keys.
 
@@ -285,7 +251,7 @@ yarn tr-generate-api-keys --email=$TRANSCEND_EMAIL --password=$TRANSCEND_PASSWOR
 | `TRANSCEND_PARENT_ORGANIZATION_ID` | The ID of the parent organization that has child organizations that need API keys generated for.                                                        | string - uuid      | false                                                    |
 | `TRANSCEND_PASSWORD`               | The password you use to log into Transcend                                                                                                              | string - password  | true                                                     |
 
-### E) Pull Shared Configuration from `0 - Data Mapping` Account
+### D) Sync Shared Configuration from `0 - Data Mapping` Across All Accounts
 
 There are some consistent settings that we will apply across all Transcend instances. The set of resource settings that can be pulled can be found here. The resources listed in the command below can be pulled and synced into other instances to enforce a consistent configuration across the privacy request in order to:
 
@@ -293,54 +259,28 @@ There are some consistent settings that we will apply across all Transcend insta
 - identifiers - the detected identifiers used to querying users for data deletion
 - consentManager - developer settings for the consent manager
 
+A post-processing step is done to remove some data that should not be synced, before that data is pushed back up into other Transcend instances
+
 ```sh
 export TRANSCEND_API_URL=https://api.us.transcend.io
 export TRANSCEND_API_KEY=SECRET_FILL_ME
-yarn tr-pull --auth=$TRANSCEND_API_KEY --resources=attributes,identifiers,consentManager
-```
-
-#### Required Environment Variables
-
-| Argument            | Description                                       | Type             | Is Secret |
-| ------------------- | ------------------------------------------------- | ---------------- | --------- |
-| `TRANSCEND_API_URL` | Transcend backend URL                             | string - url     | false     |
-| `TRANSCEND_API_KEY` | Transcend API key with scopes `Manage Data Flows` | string - api-key | true      |
-
-### F) Transform `transcend.yml` to Remove Non-Syncing Fields
-
-There are some resources that should not be synced in full from the 0 - Data Mapping instance into the other instances. This command removes the values that should not be synced.
-
-```sh
 export TRANSCEND_YAML=./transcend.yml
-yarn vz-transform-from-parent-for-children --file=$TRANSCEND_YAML
-```
-
-#### Required Environment Variables
-
-| Argument         | Description                                                                                                                                                     | Type               | Is Secret |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | --------- |
-| `TRANSCEND_YAML` | Transcend yml file format, defined by [`Transcend Input`](https://github.com/transcend-io/cli/blob/d40546cdfd76639ad1c950f913ca9b426a97895f/src/codecs.ts#L749) | string - file-path | false     |
-
-### G) Push a `transcend.yml` to All Accounts
-
-Once you have a configuration file that encodes the settings that should be set consistently across all instances, you can run
-
-```sh
-export TRANSCEND_API_URL=https://api.us.transcend.io
 export TRANSCEND_API_KEYS_PATH=./working/api-keys.json
-export TRANSCEND_YAML=./transcend.yml
+yarn tr-pull --auth=$TRANSCEND_API_KEY --resources=attributes,identifiers,consentManager --file=$TRANSCEND_YAML
+yarn vz-transform-from-parent-for-children --file=$TRANSCEND_YAML
 yarn tr-push --auth=$TRANSCEND_API_KEYS_PATH --file=$TRANSCEND_YAML
 ```
 
 #### Required Environment Variables
 
-| Argument                  | Description                                                                                                                                                             | Type               | Is Secret                                                |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | -------------------------------------------------------- |
-| `TRANSCEND_API_URL`       | Transcend backend URL                                                                                                                                                   | string - url       | false                                                    |
-| `TRANSCEND_YAML`          | Transcend yml file to push. Format defined by [`Transcend Input`](https://github.com/transcend-io/cli/blob/d40546cdfd76639ad1c950f913ca9b426a97895f/src/codecs.ts#L749) | string - file-path | false                                                    |
-| `TRANSCEND_API_KEYS_PATH` | Path to the JSON file holding the API keys for each instance. This file can be created in section "Generate API keys to Synchronize Cross-Account Data"                 | string - file-path | false - file contents are secret (should be git-ignored) |
+| Argument                  | Description                                                                                                                                                     | Type               | Is Secret                                                |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | -------------------------------------------------------- |
+| `TRANSCEND_YAML`          | Transcend yml file format, defined by [`Transcend Input`](https://github.com/transcend-io/cli/blob/d40546cdfd76639ad1c950f913ca9b426a97895f/src/codecs.ts#L749) | string - file-path | false                                                    |
+| `TRANSCEND_API_URL`       | Transcend backend URL                                                                                                                                           | string - url       | false                                                    |
+| `TRANSCEND_API_KEY`       | Transcend API key with scopes `Manage Data Flows`                                                                                                               | string - api-key   | true                                                     |
+| `TRANSCEND_API_KEYS_PATH` | Path to the JSON file holding the API keys for each instance. This file can be created in section "Generate API keys to Synchronize Cross-Account Data"         | string - file-path | false - file contents are secret (should be git-ignored) |
 
-### H) Pull a `transcend.yml` for Each Instance
+### E) Pull a `transcend.yml` for Each Instance
 
 If you need to pull the configuration files for all associated Transcend instances, you can do so using the following command:
 
@@ -359,7 +299,7 @@ yarn tr-pull --auth=$TRANSCEND_API_KEYS_PATH --file=$TRANSCEND_YAML_FOLDER --res
 | `TRANSCEND_YAML_FOLDER`   | A folder where the `transcend.yml` files will be written. Each file will be named `<instance name>,.yml`                                                | string - file-path | false                                                    |
 | `TRANSCEND_API_KEYS_PATH` | Path to the JSON file holding the API keys for each instance. This file can be created in section "Generate API keys to Synchronize Cross-Account Data" | string - file-path | false - file contents are secret (should be git-ignored) |
 
-### I) Combining Configuration Cross-Instances into the `0 - Data Mapping` -> `Data Inventory` -> `Business Entities` table
+### F) Combining Configurations Cross-Instances into the `0 - Data Mapping` -> `Data Inventory` -> `Business Entities` table
 
 Take the output of each Transcend instance and combine them into a single YML file to sync into the `0 - Data Mapping` [Business Entities](https://app.transcend.io/data-map/data-inventory/business-entities) table in the Transcend dashboard. This view allows for a summarization of various information across all Transcend instances.
 
@@ -385,7 +325,7 @@ yarn tr-push --auth=$TRANSCEND_API_KEY --file=$COMBINED_TRANSCEND_BUSINESS_ENTIT
 | `TRANSCEND_API_URL`                  | Transcend backend URL                                                                                                                                                                      | string - url       | false                                                    |
 | `TRANSCEND_API_KEY`                  | Transcend API key with scopes `Manage Data Flows`                                                                                                                                          | string - api-key   | true                                                     |
 
-### J) Pull Down Approved Data Flows to YAML Cross-Account
+### G) Pull Down Approved Data Flows to YAML Cross-Account
 
 Pull down list of all data flows that are approved
 
@@ -404,7 +344,7 @@ yarn tr-pull --auth=$TRANSCEND_API_KEYS_PATH --file=$TRANSCEND_YAML_FOLDER --res
 | `TRANSCEND_YAML_FOLDER`   | A folder where the `transcend.yml` files will be written. Each file will be named `<instance name>,.yml`                                                | string - file-path | false                                                    |
 | `TRANSCEND_API_KEYS_PATH` | Path to the JSON file holding the API keys for each instance. This file can be created in section "Generate API keys to Synchronize Cross-Account Data" | string - file-path | false - file contents are secret (should be git-ignored) |
 
-### K) Generate Cross-Instance List of Ad Tech & Site Tech
+### H) Generate Cross-Instance List of Ad Tech & Site Tech
 
 Create a single export of ad tech and site tech across all Transcend instances.
 
@@ -417,7 +357,7 @@ FIXME
 
 #### Required Environment Variables
 
-### L) Generate Per-Instance List of Ad Tech Data Silos
+### I) Generate Per-Instance List of Ad Tech Data Silos
 
 1. Pull down the data flows and cookies across all instances
 2. Determine the set of Data Silos for that instance by looking at the services tied to each data flow and cookie
@@ -428,7 +368,7 @@ FIXME
 
 #### Required Environment Variables
 
-### M) Update the Consent Manager to Latest Cross-Instance
+### J) Update the Consent Manager to Latest Cross-Instance
 
 Use this command to update each consent manager to the latest version, and deploy all active changes. Please be careful using this command, as it will deploy any outstanding changes since the last deploy.
 

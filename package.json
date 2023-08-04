@@ -11,7 +11,8 @@
   "license": "MIT",
   "main": "build/index",
   "bin": {
-    "vz-combine-legal-csv-data-flows": "./build/cli-combine-legal-csv-data-flows.js"
+    "vz-combine-legal-csv-data-flows": "./build/cli-combine-legal-csv-data-flows.js",
+    "vz-transcend-from-parent-for-children": "./build/cli-transcend-from-parent-for-children.js"
   },
   "files": [
     "build/**/*",
