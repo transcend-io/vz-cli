@@ -5,6 +5,45 @@
 
 - [Overview](#overview)
 - [Installation](#installation)
+- [Transcend CLI](#transcend-cli)
+- [Custom Commands](#custom-commands)
+  - [vz-combine-legal-csv-data-flows](#vz-combine-legal-csv-data-flows)
+    - [Authentication](#authentication)
+    - [Arguments](#arguments)
+    - [Usage](#usage)
+  - [vz-combine-legal-csv-cookies](#vz-combine-legal-csv-cookies)
+  - [vz-transform-from-parent-for-children](#vz-transform-from-parent-for-children)
+  - [vz-consent-manager-configuration-to-summary](#vz-consent-manager-configuration-to-summary)
+  - [vz-consent-manager-configuration-to-summary](#vz-consent-manager-configuration-to-summary-1)
+  - [vz-derive-integrations-from-data-flows](#vz-derive-integrations-from-data-flows)
+  - [vz-derive-per-instance-integrations-from-data-flows](#vz-derive-per-instance-integrations-from-data-flows)
+- [Useful Commands](#useful-commands)
+  - [Combine Legal CSV with Transcend Data Flows](#combine-legal-csv-with-transcend-data-flows)
+    - [Required Environment Variables](#required-environment-variables)
+  - [Combine Legal CSV with Transcend Cookies](#combine-legal-csv-with-transcend-cookies)
+    - [Required Environment Variables](#required-environment-variables-1)
+  - [Generate API keys to Synchronize Cross-Account Data](#generate-api-keys-to-synchronize-cross-account-data)
+    - [Required Environment Variables](#required-environment-variables-2)
+  - [Delete API Keys Cross-Account](#delete-api-keys-cross-account)
+    - [Required Environment Variables](#required-environment-variables-3)
+  - [Pull Shared Configuration from `0 - Data Mapping` Account](#pull-shared-configuration-from-0---data-mapping-account)
+    - [Required Environment Variables](#required-environment-variables-4)
+  - [Transform `transcend.yml` to Remove Non-Syncing Fields](#transform-transcendyml-to-remove-non-syncing-fields)
+    - [Required Environment Variables](#required-environment-variables-5)
+  - [Push a `transcend.yml` to All Accounts](#push-a-transcendyml-to-all-accounts)
+    - [Required Environment Variables](#required-environment-variables-6)
+  - [Pull a `transcend.yml` for Each Instance](#pull-a-transcendyml-for-each-instance)
+    - [Required Environment Variables](#required-environment-variables-7)
+  - [Combining Configuration Cross-Instances into the `0 - Data Mapping` -> `Data Inventory` -> `Business Entities` table](#combining-configuration-cross-instances-into-the-0---data-mapping---data-inventory---business-entities-table)
+    - [Required Environment Variables](#required-environment-variables-8)
+  - [Pull Down Approved Data Flows to YAML Cross-Account](#pull-down-approved-data-flows-to-yaml-cross-account)
+    - [Required Environment Variables](#required-environment-variables-9)
+  - [Generate Cross-Instance List of Ad Tech & Site Tech](#generate-cross-instance-list-of-ad-tech--site-tech)
+    - [Required Environment Variables](#required-environment-variables-10)
+  - [Generate Per-Instance List of Ad Tech Data Silos](#generate-per-instance-list-of-ad-tech-data-silos)
+    - [Required Environment Variables](#required-environment-variables-11)
+  - [Update the Consent Manager to Latest Cross-Instance](#update-the-consent-manager-to-latest-cross-instance)
+    - [Required Environment Variables](#required-environment-variables-12)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -185,7 +224,7 @@ export LEGAL_FILE=/Users/test/Desktop/legal.csv
 export TRANSCEND_COOKIES_FILE=/Users/test/Desktop/cookies.csv
 export COMBINED_TRANSCEND_COOKIES_FILE=/Users/test/Desktop/cookies.csv
 export TRANSCEND_API_KEY=SECRET_FILL_ME
-yarn vz-combine-legal-csv-data-flows --legalCsv=$LEGAL_FILE --dataFlowExportCsv=$TRANSCEND_COOKIES_FILE --output=$COMBINED_TRANSCEND_DATA_FLOWS_FILE
+yarn vz-combine-legal-csv-cookies --legalCsv=$LEGAL_FILE --dataFlowExportCsv=$TRANSCEND_COOKIES_FILE --output=$COMBINED_TRANSCEND_DATA_FLOWS_FILE
 yarn tr-upload-cookies-from-csv --auth=$TRANSCEND_API_KEY --file=$COMBINED_TRANSCEND_COOKIES_FILE --trackerStatus=LIVE
 ```
 
@@ -375,6 +414,8 @@ Create a single export of ad tech and site tech across all Transcend instances.
 
 FIXME
 
+#### Required Environment Variables
+
 ### Generate Per-Instance List of Ad Tech Data Silos
 
 1. Pull down the data flows and cookies across all instances
@@ -383,6 +424,8 @@ FIXME
 4. Load each `transcend.yml` into each respective Transcend instance
 
 FIXME
+
+#### Required Environment Variables
 
 ### Update the Consent Manager to Latest Cross-Instance
 
