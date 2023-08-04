@@ -397,9 +397,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@transcend-io/cli@npm:^4.71.0":
-  version: 4.71.0
-  resolution: "@transcend-io/cli@npm:4.71.0"
+"@transcend-io/cli@npm:^4.73.0":
+  version: 4.73.0
+  resolution: "@transcend-io/cli@npm:4.73.0"
   dependencies:
     "@transcend-io/airgap.js-types": ^9.2.0
     "@transcend-io/internationalization": ^1.6.0
@@ -427,6 +427,7 @@ __metadata:
     yargs-parser: ^21.1.1
   bin:
     tr-build-xdi-sync-endpoint: ./build/cli-build-xdi-sync-endpoint.js
+    tr-consent-managers-to-business-entities: cli-consent-managers-to-business-entities.ts
     tr-cron-mark-identifiers-completed: ./build/cli-cron-mark-identifiers-completed.js
     tr-cron-pull-identifiers: ./build/cli-cron-pull-identifiers.js
     tr-discover-silos: ./build/cli-discover-silos.js
@@ -446,7 +447,7 @@ __metadata:
     tr-skip-request-data-silos: ./build/cli-skip-request-data-silos.js
     tr-update-consent-manager: ./build/cli-update-consent-manager-to-latest.js
     tr-upload-data-flows-from-csv: ./build/cli-upload-data-flows-from-csv.js
-  checksum: caf24c91cb4ffe6f6f2100c1963e3bd6ad284e54f51709deb61e397b4218f39fd647c20debfc9cdc243ac1deb466fdf9d9b1537739a8c0e34e6abcc563a20638
+  checksum: 4a2af17d9f9d9ed3cbd08c6fdeb0b85694c1e4d1d1654c82ce116848d416fa6ef8787935f6480840098a51c915a313ca41cbe9657727a330ab68b420cd75ce53
   languageName: node
   linkType: hard
 
@@ -493,7 +494,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@transcend-io/vz-cli@workspace:."
   dependencies:
-    "@transcend-io/cli": ^4.71.0
+    "@transcend-io/cli": ^4.73.0
     "@types/node": ^18.15.11
     "@types/yargs-parser": ^21
     "@typescript-eslint/eslint-plugin": ^5.58.0
@@ -515,6 +516,7 @@ __metadata:
     yargs-parser: ^21.1.1
   bin:
     vz-combine-legal-csv-data-flows: ./build/cli-combine-legal-csv-data-flows.js
+    vz-transcend-from-parent-for-children: ./build/cli-transcend-from-parent-for-children.js
   languageName: unknown
   linkType: soft
 

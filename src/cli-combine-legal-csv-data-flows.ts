@@ -34,7 +34,7 @@ function main(): void {
    * information from each row on a domain and a CPRA Language field, which is where they
    * are putting SaleOfInfo or something like it. Stores into the map `legalDecisions`
    */
-  logger.info(`Reading in legal decisions from ${legalCsv}`);
+  logger.info(colors.magenta(`Reading in legal decisions from "${legalCsv}"`));
   const csvData = readCsv(legalCsv, LegalTrackerCsvCodec);
   const legalDecisions = csvData.reduce(
     (acc, row) =>
@@ -46,7 +46,7 @@ function main(): void {
 
   logger.info(
     colors.magenta(
-      `Reading file located at ${dataFlowExportCsv} and updating with info from the legal team decisions`,
+      `Reading file located at "${dataFlowExportCsv}" and updating with info from the legal team decisions`,
     ),
   );
   const dataFlowExportData = readCsv(legalCsv, DataFlowCsvInput);
@@ -68,7 +68,7 @@ function main(): void {
       if (relevantLegalDecision) {
         logger.info(
           // eslint-disable-next-line max-len
-          `Found a legal decision for ${dataFlow} under ${domainPart}. Old status was ${row.Purpose}, new is ${relevantLegalDecision}`,
+          `Found a legal decision for "${dataFlow}" under "${domainPart}". Old status was "${row.Purpose}", new is "${relevantLegalDecision}"`,
         );
         records.push({
           ...row,
