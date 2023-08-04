@@ -2,7 +2,7 @@
   "author": "Transcend Inc.",
   "name": "@transcend-io/vz-cli",
   "description": "Customer Cli",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "homepage": "https://github.com/transcend-io/vz-cli",
   "repository": {
     "type": "git",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "main": "build/index",
   "bin": {
-    "vz-combine-legal-csv": "./build/cli-combine-legal-csv.js"
+    "vz-combine-legal-csv-data-flows": "./build/cli-combine-legal-csv-data-flows.js"
   },
   "files": [
     "build/**/*",
@@ -44,7 +44,7 @@
   },
   "packageManager": "yarn@3.5.0",
   "dependencies": {
-    "@transcend-io/cli": "^4.70.0",
+    "@transcend-io/cli": "^4.71.0",
     "colors": "^1.4.0",
     "fp-ts": "=2.11.8",
     "io-ts": "=2.2.16",
