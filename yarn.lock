@@ -397,9 +397,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@transcend-io/cli@npm:^4.73.0":
-  version: 4.73.0
-  resolution: "@transcend-io/cli@npm:4.73.0"
+"@transcend-io/cli@npm:^4.74.0":
+  version: 4.74.0
+  resolution: "@transcend-io/cli@npm:4.74.0"
   dependencies:
     "@transcend-io/airgap.js-types": ^9.2.0
     "@transcend-io/internationalization": ^1.6.0
@@ -446,8 +446,9 @@ __metadata:
     tr-retry-request-data-silos: ./build/cli-retry-request-data-silos.js
     tr-skip-request-data-silos: ./build/cli-skip-request-data-silos.js
     tr-update-consent-manager: ./build/cli-update-consent-manager-to-latest.js
+    tr-upload-cookies-from-csv: ./build/cli-upload-cookies-from-csv.js
     tr-upload-data-flows-from-csv: ./build/cli-upload-data-flows-from-csv.js
-  checksum: 4a2af17d9f9d9ed3cbd08c6fdeb0b85694c1e4d1d1654c82ce116848d416fa6ef8787935f6480840098a51c915a313ca41cbe9657727a330ab68b420cd75ce53
+  checksum: 39395ab86cc37a01cbcc81cee15b14e82a3e8af8ac70b6910d450dae87bae09e713c3f4988fc2828492a8ebabe9f42c75e6822836c8f5f0f7af347b3a9d73e7b
   languageName: node
   linkType: hard
 
@@ -494,7 +495,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@transcend-io/vz-cli@workspace:."
   dependencies:
-    "@transcend-io/cli": ^4.73.0
+    "@transcend-io/cli": ^4.74.0
     "@types/node": ^18.15.11
     "@types/yargs-parser": ^21
     "@typescript-eslint/eslint-plugin": ^5.58.0
@@ -515,6 +516,7 @@ __metadata:
     typescript: ^5.0.4
     yargs-parser: ^21.1.1
   bin:
+    vz-combine-legal-csv-cookies: ./build/cli-combine-legal-csv-cookies.js
     vz-combine-legal-csv-data-flows: ./build/cli-combine-legal-csv-data-flows.js
     vz-transcend-from-parent-for-children: ./build/cli-transcend-from-parent-for-children.js
   languageName: unknown

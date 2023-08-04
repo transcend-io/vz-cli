@@ -16,8 +16,10 @@
     - [Arguments](#arguments)
     - [Usage](#usage)
   - [vz-combine-legal-csv-cookies](#vz-combine-legal-csv-cookies)
+    - [Authentication](#authentication-1)
+    - [Arguments](#arguments-1)
+    - [Usage](#usage-1)
   - [vz-transform-from-parent-for-children](#vz-transform-from-parent-for-children)
-  - [vz-consent-manager-configuration-to-summary](#vz-consent-manager-configuration-to-summary)
   - [vz-derive-integrations-from-data-flows](#vz-derive-integrations-from-data-flows)
   - [vz-derive-per-instance-integrations-from-data-flows](#vz-derive-per-instance-integrations-from-data-flows)
 - [Useful Commands](#useful-commands)
@@ -68,14 +70,14 @@ yarn add -D @transcend-io/cli
 
 ### Step 3) Create a .env file to store secrets and common environment configuration
 
-Create a .env file with variables like this:
+Create a `./.env` file with variables like this:
 
 ```.sh
 TRANSCEND_API_KEY=FILL_ME
 TRANSCEND_API_URL=https://api.us.transcend.io
 ```
 
-The `TRANSCEND_API_KEY` is a secret, and this should not be committed to git or pasted into your terminal history. If you do either of these, the API key can be cycled [in the Transcend Dashboard](https://app.transcend.io/infrastructure/api-keys).
+The `TRANSCEND_API_KEY` is a secret, and this should not be committed to git or pasted into your terminal history. You should add your `./.env` to the `.gitignore` if you are running these commands from a git repository. If you do commit an API key or paste it in the terminal, the API key can be cycled [in the Transcend Dashboard](https://app.transcend.io/infrastructure/api-keys).
 
 ### Step 4) Run commands
 
@@ -97,6 +99,7 @@ yarn tr-update-consent-manager --auth=$TRANSCEND_API_KEY
 yarn tr-pull-consent-metrics --auth=$TRANSCEND_API_KEY --start=01/01/2023
 yarn tr-consent-managers-to-business-entities --consentManagerYmlFolder=./working/consent-managers/ --output=./custom.yml
 yarn tr-upload-data-flows-from-csv --auth=$TRANSCEND_API_KEY --file=./approved-flows.csv --trackerStatus=LIVE
+yarn tr-upload-cookies-from-csv --auth=$TRANSCEND_API_KEY --file=./approved-flows.csv --trackerStatus=LIVE
 yarn tr-generate-api-keys --auth=$TRANSCEND_API_KEY --email=test@transcend.io --password=$TRANSCEND_PASSWORD \
    --scopes="View Email Templates,View Data Map" --apiKeyTitle="CLI Usage Cross Instance Sync" -file=./working/auth.json
 yarn tr-build-xdi-sync-endpoint --auth=$TRANSCEND_API_KEY --xdiLocation=https://cdn.your-site.com/xdi.js
@@ -141,9 +144,32 @@ yarn vz-combine-legal-csv-data-flows \
 
 ### vz-combine-legal-csv-cookies
 
-FIXME
+This command allows for combining information in a CSV from a legal team into a CSV of cookies
 
-FIXME add tr-upload-cookies-csv
+#### Authentication
+
+No authentication is required to run this cli command, it comes CSV files that are expected to be on disk.
+
+#### Arguments
+
+| Argument        | Description                                                                                                                                                                           | Type               | Default              | Required |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | -------------------- | -------- |
+| legalCsv        | Custom Legal CSV file. File format defined by [`LegalTrackerCsvCodec`](https://github.com/transcend-io/vz-cli/blob/757b42301116b551d0a927944e3c4407a802a9de/src/codecs.ts#L6)         | string - file-path | ./legalMaster.csv    | false    |
+| cookieExportCsv | Export of cookies from the Transcend dashboard. File format defined by [`CookieCsvInput`](https://github.com/transcend-io/cli/blob/main/src/codecs.ts#L849-L873)                      | string - file-path | ./triage-cookies.csv | false    |
+| output          | Output file format that can be re-imported into Transcend dashboard. File format defined by [`CookieCsvInput`](https://github.com/transcend-io/cli/blob/main/src/codecs.ts#L849-L873) | string - file-path | ./combined.csv       | false    |
+
+Note: You `trackerStatus` can be specified on a per data flow basis by adding a column named "Status" to the CSV. The values should be of type `ConsentTrackerStatus` - which is `LIVE` or `NEEDS_REVIEW`.
+
+#### Usage
+
+Combine two files on disk
+
+```sh
+yarn vz-combine-legal-csv-cookies \
+   --legalCsv=/Users/test/Desktop/legal.csv \
+   --cookieExportCsv=/Users/test/Desktop/cookies.csv \
+   --output=/Users/test/Desktop/output.csv
+```
 
 ### vz-transform-from-parent-for-children
 
@@ -152,10 +178,6 @@ Remove data from the `0 - Data Mapping` `transcend.yml` output that should not b
 ```sh
 yarn vz-transcend-from-parent-for-children --file=./transcend.yml
 ```
-
-### vz-consent-manager-configuration-to-summary
-
-FIXME
 
 ### vz-derive-integrations-from-data-flows
 
@@ -188,7 +210,7 @@ export TRANSCEND_COOKIES_FILE=/Users/test/Desktop/cookies.csv
 export COMBINED_TRANSCEND_COOKIES_FILE=/Users/test/Desktop/cookies.csv
 export TRANSCEND_API_KEY=SECRET_FILL_ME
 yarn vz-combine-legal-csv-data-flows --legalCsv=$LEGAL_FILE --dataFlowExportCsv=$TRANSCEND_DATA_FLOWS_FILE --output=$COMBINED_TRANSCEND_DATA_FLOWS_FILE
-yarn vz-combine-legal-csv-cookies --legalCsv=$LEGAL_FILE --dataFlowExportCsv=$TRANSCEND_COOKIES_FILE --output=$COMBINED_TRANSCEND_DATA_FLOWS_FILE
+yarn vz-combine-legal-csv-cookies --legalCsv=$LEGAL_FILE --cookieExportCsv=$TRANSCEND_COOKIES_FILE --output=$COMBINED_TRANSCEND_DATA_FLOWS_FILE
 yarn tr-upload-data-flows-from-csv --auth=$TRANSCEND_API_KEY --file=$COMBINED_TRANSCEND_DATA_FLOWS_FILE --trackerStatus=LIVE
 yarn tr-upload-data-flows-from-csv --auth=$TRANSCEND_API_KEY --file=$COMBINED_TRANSCEND_COOKIES_FILE --trackerStatus=LIVE
 ```
@@ -200,8 +222,8 @@ yarn tr-upload-data-flows-from-csv --auth=$TRANSCEND_API_KEY --file=$COMBINED_TR
 | `LEGAL_FILE`                         | Custom Legal CSV file. File format defined by [`LegalTrackerCsvCodec`](https://github.com/transcend-io/vz-cli/blob/757b42301116b551d0a927944e3c4407a802a9de/src/codecs.ts#L6)              | string - file-path | false     |
 | `TRANSCEND_DATA_FLOWS_FILE`          | Export of data flows from the Transcend dashboard. File format defined by [`DataFlowCsvInput`](https://github.com/transcend-io/cli/blob/main/src/codecs.ts#L821C14-L847)                   | string - file-path | false     |
 | `COMBINED_TRANSCEND_DATA_FLOWS_FILE` | Output file format that can be re-imported into Transcend dashboard. File format defined by [`DataFlowCsvInput`](https://github.com/transcend-io/cli/blob/main/src/codecs.ts#L821C14-L847) | string - file-path | false     |
-| `TRANSCEND_COOKIES_FILE`             | Export of cookies from the Transcend dashboard. File format defined by [`CookieCsvInput`](FIXME)                                                                                           | string - file-path | false     |
-| `COMBINED_TRANSCEND_COOKIES_FILE`    | Output file format that can be re-imported into Transcend dashboard. File format defined by [`CookieCsvInput`](FIXME)                                                                      | string - file-path | false     |
+| `TRANSCEND_COOKIES_FILE`             | Export of cookies from the Transcend dashboard. File format defined by[`CookieCsvInput`](https://github.com/transcend-io/cli/blob/main/src/codecs.ts#L849-L873)                            | string - file-path | false     |
+| `COMBINED_TRANSCEND_COOKIES_FILE`    | Output file format that can be re-imported into Transcend dashboard. File format defined by [`CookieCsvInput`](https://github.com/transcend-io/cli/blob/main/src/codecs.ts#L849-L873)      | string - file-path | false     |
 | `TRANSCEND_API_URL`                  | Transcend backend URL                                                                                                                                                                      | string - url       | false     |
 | `TRANSCEND_API_KEY`                  | Transcend API key with scopes `Manage Cookies`                                                                                                                                             | string - api-key   | true      |
 
