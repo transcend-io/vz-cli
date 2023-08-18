@@ -518,7 +518,6 @@ __metadata:
     typescript: ^5.0.4
     yargs-parser: ^21.1.1
   bin:
-    vz-combine-legal-csv-cookies: ./build/cli-combine-legal-csv-cookies.js
     vz-combine-legal-csv-data-flows: ./build/cli-combine-legal-csv-data-flows.js
     vz-transcend-from-parent-for-children: ./build/cli-transcend-from-parent-for-children.js
   languageName: unknown
