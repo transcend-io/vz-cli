@@ -49,7 +49,7 @@ function main(): void {
       `Reading file located at "${cookieExportCsv}" and updating with info from the legal team decisions`,
     ),
   );
-  const cookieExportData = readCsv(legalCsv, CookieCsvInput);
+  const cookieExportData = readCsv(cookieExportCsv, CookieCsvInput);
 
   /**
    * NOTES: This deeply nested, hacky blob of code reads through the cookieExportCsv file, which
