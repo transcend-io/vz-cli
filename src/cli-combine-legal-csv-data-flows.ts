@@ -49,7 +49,7 @@ function main(): void {
       `Reading file located at "${dataFlowExportCsv}" and updating with info from the legal team decisions`,
     ),
   );
-  const dataFlowExportData = readCsv(legalCsv, DataFlowCsvInput);
+  const dataFlowExportData = readCsv(dataFlowExportCsv, DataFlowCsvInput);
 
   /**
    * NOTES: This deeply nested, hacky blob of code reads through the dataFlowExportCsv file, which
