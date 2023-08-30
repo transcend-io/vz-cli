@@ -3,7 +3,11 @@
 import yargs from 'yargs-parser';
 import colors from 'colors';
 
-import { readCsv, DataFlowCsvInput, writeCsv } from '@transcend-io/cli';
+import {
+  readCsv,
+  readTranscendYaml,
+  writeTranscendYaml,
+} from '@transcend-io/cli';
 import { logger } from './logger';
 import { LegalTrackerCsvCodec } from './codecs';
 
@@ -12,21 +16,21 @@ import { LegalTrackerCsvCodec } from './codecs';
  *
  * yarn ts-node ./src/cli-combine-legal-csv-data-flows.ts \
  *   --legalCsv=/Users/michaelfarrell/Desktop/legal.csv \
- *   --dataFlowExportCsv=/Users/michaelfarrell/Desktop/data-flows.csv
- *   --output=/Users/michaelfarrell/Desktop/output.csv
+ *   --dataFlowYml=/Users/michaelfarrell/Desktop/transcend.yml
+ *   --output=/Users/michaelfarrell/Desktop/transcend-output.yml
  *
  * Standard usage:
  * yarn vz-combine-legal-csv-data-flows \
  *   --legalCsv=/Users/michaelfarrell/Desktop/legal.csv \
- *   --dataFlowExportCsv=/Users/michaelfarrell/Desktop/data-flows.csv \
- *   --output=/Users/michaelfarrell/Desktop/output.csv
+ *   --dataFlowYml=/Users/michaelfarrell/Desktop/transcend.yml \
+ *   --output=/Users/michaelfarrell/Desktop/transcend-output.yml
  */
 function main(): void {
   // Parse command line arguments
   const {
     legalCsv = './legalMaster.csv',
-    dataFlowExportCsv = './triage-data-flows.csv',
-    output = './combined.csv',
+    dataFlowYml = './transcend.yml',
+    output = './transcend.yml',
   } = yargs(process.argv.slice(2)) as { [k in string]: string };
 
   /**
@@ -41,44 +45,50 @@ function main(): void {
       Object.assign(acc, {
         [row['Tracker Domain']]: row['CPRA Language'],
       }),
-    new Map<string, string>(),
+    {} as { [k in string]: string },
   );
 
+  // Read in YML
   logger.info(
     colors.magenta(
-      `Reading file located at "${dataFlowExportCsv}" and updating with info from the legal team decisions`,
+      `Reading file located at "${dataFlowYml}" and updating with info from the legal team decisions`,
     ),
   );
-  const dataFlowExportData = readCsv(dataFlowExportCsv, DataFlowCsvInput);
+  const dataFlowExportData = readTranscendYaml(dataFlowYml);
 
-  /**
-   * NOTES: This deeply nested, hacky blob of code reads through the dataFlowExportCsv file, which
-   * is expected to be in the format that tr-upload-data-flows-from-csv expects, which is also the format
-   * that is exported from the Admin Dashboard. We look at each row and try to determine if we should override
-   * the `Status` column if the legal sheet gave an authoritative answer on either the domain, or any parent
-   * domain of the domain in that row, which is a feature explicitly requested.
-   */
-  const records: DataFlowCsvInput[] = [];
-  dataFlowExportData.forEach((row) => {
-    const dataFlow = row['Connections Made To'];
-    const dataFlowParts = dataFlow.split('.');
+  (dataFlowExportData['data-flows'] || []).forEach((row) => {
+    const { value, trackingPurposes } = row;
+    // split the data flow into sub-paths
+    const dataFlowParts = value.split('.');
+
+    // check if the legal rule matches any sub-paths
     for (let i = dataFlowParts.length; i > 1; i -= 1) {
+      // construct sub-domain
       const domainPart = dataFlowParts.slice(-i).join('.');
-      const relevantLegalDecision = legalDecisions.get(domainPart);
+
+      // check if legal csv has decision
+      const relevantLegalDecision = legalDecisions[domainPart];
+
+      // Update data flow if decision is changed
       if (relevantLegalDecision) {
         logger.info(
-          // eslint-disable-next-line max-len
-          `Found a legal decision for "${dataFlow}" under "${domainPart}". Old status was "${row.Purpose}", new is "${relevantLegalDecision}"`,
+          `Found a legal decision for "${value}" under "${domainPart}". Old status was "${trackingPurposes?.join(
+            ',',
+          )}", new is "${relevantLegalDecision}"`,
         );
-        records.push({
-          ...row,
-          Purpose: relevantLegalDecision ?? row.Purpose,
-          /** If a legal decision was made, make the data flow live */
-          Status:
-            relevantLegalDecision !== undefined
-              ? 'LIVE'
-              : row.Status || 'NEEDS_REVIEW',
-        });
+
+        // updating
+        // eslint-disable-next-line no-param-reassign
+        row.trackingPurposes = relevantLegalDecision
+          ? relevantLegalDecision.split(',')
+          : row.trackingPurposes;
+        // eslint-disable-next-line no-param-reassign
+        row.status =
+          relevantLegalDecision !== undefined
+            ? 'LIVE'
+            : row.status || 'NEEDS_REVIEW';
+
+        // no need to keep for-loop going
         return;
       }
     }
@@ -87,7 +97,8 @@ function main(): void {
   /**
    * NOTES: At the end, writes out a new CSV file with the changes
    */
-  writeCsv(output, records);
+  writeTranscendYaml(output, dataFlowExportData);
+  logger.info(colors.green(`Wrote results to "${output}"`));
 }
 
 main();
