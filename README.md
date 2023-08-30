@@ -20,7 +20,7 @@
     - [Arguments](#arguments-1)
     - [Usage](#usage-1)
 - [Useful Commands](#useful-commands)
-  - [A) Combine Legal CSV with Transcend Data Flows and Cookies](#a-combine-legal-csv-with-transcend-data-flows-and-cookies)
+  - [A) Combine Legal CSV with Transcend Data Flows](#a-combine-legal-csv-with-transcend-data-flows)
     - [Required Environment Variables](#required-environment-variables)
   - [B) Generate API keys to Synchronize Cross-Account Data](#b-generate-api-keys-to-synchronize-cross-account-data)
     - [Required Environment Variables](#required-environment-variables-1)
@@ -40,6 +40,8 @@
     - [Required Environment Variables](#required-environment-variables-8)
   - [J) Update the Consent Manager to Latest Cross-Instance](#j-update-the-consent-manager-to-latest-cross-instance)
     - [Required Environment Variables](#required-environment-variables-9)
+  - [H) Download Transcend Cookies and Re-Upload After Edits](#h-download-transcend-cookies-and-re-upload-after-edits)
+    - [Required Environment Variables](#required-environment-variables-10)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -85,8 +87,8 @@ source .env
 # vz cli commands available within @transcend-io/vz-cli
 yarn vz-combine-legal-csv-data-flows \
    --legalCsv=/Users/test/Desktop/legal.csv \
-   --dataFlowExportCsv=/Users/test/Desktop/data-flows.csv \
-   --output=/Users/test/Desktop/output.csv
+   --dataFlowYml=/Users/test/Desktop/transcend.yml \
+   --output=/Users/test/Desktop/transcend-output.yml
 yarn vz-transcend-from-parent-for-children --file=./transcend.yml
 
 # transcend cli commands available within @transcend-io/cli
@@ -124,11 +126,11 @@ No authentication is required to run this cli command, it comes CSV files that a
 
 #### Arguments
 
-| Argument          | Description                                                                                                                                                                                | Type               | Default                 | Required |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------ | ----------------------- | -------- |
-| legalCsv          | Custom Legal CSV file. File format defined by [`LegalTrackerCsvCodec`](https://github.com/transcend-io/vz-cli/blob/757b42301116b551d0a927944e3c4407a802a9de/src/codecs.ts#L6)              | string - file-path | ./legalMaster.csv       | false    |
-| dataFlowExportCsv | Export of data flows from the Transcend dashboard. File format defined by [`DataFlowCsvInput`](https://github.com/transcend-io/cli/blob/main/src/codecs.ts#L821C14-L847)                   | string - file-path | ./triage-data-flows.csv | false    |
-| output            | Output file format that can be re-imported into Transcend dashboard. File format defined by [`DataFlowCsvInput`](https://github.com/transcend-io/cli/blob/main/src/codecs.ts#L821C14-L847) | string - file-path | ./combined.csv          | false    |
+| Argument    | Description                                                                                                                                                                                 | Type               | Default           | Required |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----------------- | -------- |
+| legalCsv    | Custom Legal CSV file. File format defined by [`LegalTrackerCsvCodec`](https://github.com/transcend-io/vz-cli/blob/757b42301116b551d0a927944e3c4407a802a9de/src/codecs.ts#L6)               | string - file-path | ./legalMaster.csv | false    |
+| dataFlowYml | Export of data flows from the Transcend dashboard. File format defined by [`TranscendInput`](https://github.com/transcend-io/cli/blob/main/src/codecs.ts#L762C14-L762C28)                   | string - file-path | ./transcend.yml   | false    |
+| output      | Output file format that can be re-imported into Transcend dashboard. File format defined by [`TranscendInput`](https://github.com/transcend-io/cli/blob/main/src/codecs.ts#L762C14-L762C28) | string - file-path | ./transcend.yml   | false    |
 
 Note: You `trackerStatus` can be specified on a per data flow basis by adding a column named "Status" to the CSV. The values should be of type `ConsentTrackerStatus` - which is `LIVE` or `NEEDS_REVIEW`.
 
@@ -139,8 +141,8 @@ Combine two files on disk
 ```sh
 yarn vz-combine-legal-csv-data-flows \
    --legalCsv=/Users/test/Desktop/legal.csv \
-   --dataFlowExportCsv=/Users/test/Desktop/data-flows.csv \
-   --output=/Users/test/Desktop/output.csv
+   --dataFlowYml=/Users/test/Desktop/transcend.yml \
+   --output=/Users/test/Desktop/transcend-output.yml
 ```
 
 ### vz-transform-from-parent-for-children
@@ -165,29 +167,21 @@ yarn vz-transcend-from-parent-for-children --file=./transcend.yml
 
 ## Useful Commands
 
-### A) Combine Legal CSV with Transcend Data Flows and Cookies
+### A) Combine Legal CSV with Transcend Data Flows
 
 Combine legal's categorizations of vendors, combine those categorizations with what was in Transcend, and push those categorizations back into Transcend.
 
-Step 1) Download the CSV of data flows that you want to edit from the Admin Dashboard under [Consent Manager -> Data Flows](https://app.transcend.io/consent-manager/data-flows). You can download data flows from both the "Triage" and "Approved" tabs.
-
-<img width="1464" alt="Screenshot 2023-06-22 at 6 05 36 PM" src="https://github.com/transcend-io/cli/assets/10264973/c4b65b31-2cf3-49c9-b543-041567c7aff8">
-
-Step 2) Download the CSV of cookies that you want to edit from the Admin Dashboard under [Consent Manager -> Cookies](https://app.transcend.io/consent-manager/cookies). You can download data flows from both the "Triage" and "Approved" tabs.
-
-Step 3) Run CLI commands:
+Step 1) Run CLI commands:
 
 ```sh
 export TRANSCEND_API_URL=https://api.us.transcend.io
 export LEGAL_FILE=/Users/test/Desktop/legal.csv
-export TRANSCEND_DATA_FLOWS_FILE=/Users/test/Desktop/data-flows.csv
-export COMBINED_TRANSCEND_DATA_FLOWS_FILE=/Users/test/Desktop/data-flows.csv
-export TRANSCEND_COOKIES_FILE=/Users/test/Desktop/cookies.csv
-export COMBINED_TRANSCEND_COOKIES_FILE=/Users/test/Desktop/cookies.csv
+export TRANSCEND_DATA_FLOWS_FILE=/Users/test/Desktop/data-flows.yml
+export COMBINED_TRANSCEND_DATA_FLOWS_FILE=/Users/test/Desktop/data-flows-combined.yml
 export TRANSCEND_API_KEY=SECRET_FILL_ME
-yarn vz-combine-legal-csv-data-flows --legalCsv=$LEGAL_FILE --dataFlowExportCsv=$TRANSCEND_DATA_FLOWS_FILE --output=$COMBINED_TRANSCEND_DATA_FLOWS_FILE
-yarn tr-upload-data-flows-from-csv --auth=$TRANSCEND_API_KEY --file=$COMBINED_TRANSCEND_DATA_FLOWS_FILE --trackerStatus=LIVE
-yarn tr-upload-cookies-from-csv --auth=$TRANSCEND_API_KEY --file=$COMBINED_TRANSCEND_COOKIES_FILE --trackerStatus=LIVE
+yarn tr-pull --auth=$TRANSCEND_API_KEY --file=$TRANSCEND_DATA_FLOWS_FILE --resources=dataFlows -trackerStatuses=NEEDS_REVIEW,LIVE
+yarn vz-combine-legal-csv-data-flows --legalCsv=$LEGAL_FILE --dataFlowYml=$TRANSCEND_DATA_FLOWS_FILE --output=$COMBINED_TRANSCEND_DATA_FLOWS_FILE
+yarn tr-push --auth=$TRANSCEND_API_KEY
 ```
 
 #### Required Environment Variables
@@ -427,3 +421,28 @@ yarn tr-generate-api-keys  --email=$TRANSCEND_EMAIL --password=$TRANSCEND_PASSWO
 | `TRANSCEND_PASSWORD`               | The password you use to log into Transcend                                                                                                              | string - password  | true                                                     |
 | `TRANSCEND_API_KEYS_PATH`          | Path to the JSON file holding the API keys for each instance. This file can be created in section "Generate API keys to Synchronize Cross-Account Data" | string - file-path | false - file contents are secret (should be git-ignored) |
 | `TRANSCEND_PARENT_ORGANIZATION_ID` | The ID of the parent organization that has child organizations that need API keys generated for.                                                        | string - uuid      | false                                                    |
+
+### H) Download Transcend Cookies and Re-Upload After Edits
+
+Step 1) Download the CSV of cookies that you want to edit from the Admin Dashboard under [Consent Manager -> Cookies](https://app.transcend.io/consent-manager/cookies). You can download data flows from both the "Triage" and "Approved" tabs.
+
+Step 2) Edit the file
+
+Step 3) Run CLI commands:
+
+```sh
+export TRANSCEND_API_URL=https://api.us.transcend.io
+export TRANSCEND_COOKIES_FILE=/Users/test/Desktop/cookies.csv
+export COMBINED_TRANSCEND_COOKIES_FILE=/Users/test/Desktop/cookies.csv
+export TRANSCEND_API_KEY=SECRET_FILL_ME
+yarn tr-upload-cookies-from-csv --auth=$TRANSCEND_API_KEY --file=$COMBINED_TRANSCEND_COOKIES_FILE --trackerStatus=LIVE
+```
+
+#### Required Environment Variables
+
+| Argument                          | Description                                                                                                                                                                           | Type               | Is Secret |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | --------- |
+| `TRANSCEND_COOKIES_FILE`          | Export of cookies from the Transcend dashboard. File format defined by[`CookieCsvInput`](https://github.com/transcend-io/cli/blob/main/src/codecs.ts#L849-L873)                       | string - file-path | false     |
+| `COMBINED_TRANSCEND_COOKIES_FILE` | Output file format that can be re-imported into Transcend dashboard. File format defined by [`CookieCsvInput`](https://github.com/transcend-io/cli/blob/main/src/codecs.ts#L849-L873) | string - file-path | false     |
+| `TRANSCEND_API_URL`               | Transcend backend URL                                                                                                                                                                 | string - url       | false     |
+| `TRANSCEND_API_KEY`               | Transcend API key with scopes `Manage Cookies`                                                                                                                                        | string - api-key   | true      |
