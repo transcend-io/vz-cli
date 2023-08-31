@@ -181,7 +181,7 @@ export COMBINED_TRANSCEND_DATA_FLOWS_FILE=/Users/test/Desktop/data-flows-combine
 export TRANSCEND_API_KEY=SECRET_FILL_ME
 yarn tr-pull --auth=$TRANSCEND_API_KEY --file=$TRANSCEND_DATA_FLOWS_FILE --resources=dataFlows -trackerStatuses=NEEDS_REVIEW,LIVE
 yarn vz-combine-legal-csv-data-flows --legalCsv=$LEGAL_FILE --dataFlowYml=$TRANSCEND_DATA_FLOWS_FILE --output=$COMBINED_TRANSCEND_DATA_FLOWS_FILE
-yarn tr-push --auth=$TRANSCEND_API_KEY
+yarn tr-push --auth=$TRANSCEND_API_KEY --file=$COMBINED_TRANSCEND_DATA_FLOWS_FILE
 ```
 
 #### Required Environment Variables
