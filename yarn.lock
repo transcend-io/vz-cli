@@ -498,6 +498,7 @@ __metadata:
   resolution: "@transcend-io/vz-cli@workspace:."
   dependencies:
     "@transcend-io/cli": ^4.75.1
+    "@types/lodash": ^4.14.202
     "@types/node": ^18.15.11
     "@types/yargs-parser": ^21
     "@typescript-eslint/eslint-plugin": ^5.58.0
@@ -513,6 +514,7 @@ __metadata:
     eslint-plugin-jsdoc: ^41.1.1
     fp-ts: =2.11.8
     io-ts: =2.2.16
+    lodash: ^4.17.21
     prettier: ^2.8.7
     ts-node: 10.9.1
     typescript: ^5.0.4
@@ -597,6 +599,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: b5f8aa592cc21c16d99e69aec0976f12b893b055e4456d90148a610a6b6088e297b2ba5f38f8c8280cef006cfd8f9ec99e069905020882619dc5fc8aa46f5f27
+  languageName: node
+  linkType: hard
+
+"@types/lodash@npm:^4.14.202":
+  version: 4.14.202
+  resolution: "@types/lodash@npm:4.14.202"
+  checksum: a91acf3564a568c6f199912f3eb2c76c99c5a0d7e219394294213b3f2d54f672619f0fde4da22b29dc5d4c31457cd799acc2e5cb6bd90f9af04a1578483b6ff7
   languageName: node
   linkType: hard
 
