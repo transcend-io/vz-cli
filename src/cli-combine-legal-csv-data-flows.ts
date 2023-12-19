@@ -1,5 +1,5 @@
 #!/usr/bin/env/node
-
+import difference from 'lodash/difference';
 import yargs from 'yargs-parser';
 import colors from 'colors';
 
@@ -57,7 +57,7 @@ function main(): void {
   const dataFlowExportData = readTranscendYaml(dataFlowYml);
 
   (dataFlowExportData['data-flows'] || []).forEach((row) => {
-    const { value, trackingPurposes } = row;
+    const { value, trackingPurposes, status } = row;
     // split the data flow into sub-paths
     const dataFlowParts = value.split('.');
 
@@ -71,22 +71,25 @@ function main(): void {
 
       // Update data flow if decision is changed
       if (relevantLegalDecision) {
+        const newPurposes = relevantLegalDecision.split(',');
         logger.info(
-          `Found a legal decision for "${value}" under "${domainPart}". Old status was "${trackingPurposes?.join(
-            ',',
-          )}", new is "${relevantLegalDecision}"`,
+          `Found a legal decision for "${value}" under "${domainPart}". \n    ` +
+            `Old purpose in Transcend "${trackingPurposes?.join(',')}"\n    ` +
+            `new purpose in legal sheet is: "${newPurposes.join(',')}"\n    ` +
+            `Old data flow status is: ${status}\n    ` +
+            'New data flow status is: LIVE\n    ' +
+            `Data flow is being updated by this script?: ${
+              status !== 'LIVE' ||
+              difference(newPurposes, trackingPurposes || []).length > 0 ||
+              difference(trackingPurposes || [], newPurposes).length > 0
+            }`,
         );
 
         // updating
         // eslint-disable-next-line no-param-reassign
-        row.trackingPurposes = relevantLegalDecision
-          ? relevantLegalDecision.split(',')
-          : row.trackingPurposes;
+        row.trackingPurposes = newPurposes;
         // eslint-disable-next-line no-param-reassign
-        row.status =
-          relevantLegalDecision !== undefined
-            ? 'LIVE'
-            : row.status || 'NEEDS_REVIEW';
+        row.status = 'LIVE';
 
         // no need to keep for-loop going
         return;

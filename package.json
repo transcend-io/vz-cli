@@ -2,7 +2,7 @@
   "author": "Transcend Inc.",
   "name": "@transcend-io/vz-cli",
   "description": "Customer Cli",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "homepage": "https://github.com/transcend-io/vz-cli",
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
     "prepublish": "yarn build"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.202",
     "@types/node": "^18.15.11",
     "@types/yargs-parser": "^21",
     "@typescript-eslint/eslint-plugin": "^5.58.0",
@@ -49,6 +50,7 @@
     "colors": "^1.4.0",
     "fp-ts": "=2.11.8",
     "io-ts": "=2.2.16",
+    "lodash": "^4.17.21",
     "yargs-parser": "^21.1.1"
   }
 }

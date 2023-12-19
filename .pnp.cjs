@@ -29,6 +29,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["@transcend-io/cli", "npm:4.75.1"],\
+            ["@types/lodash", "npm:4.14.202"],\
             ["@types/node", "npm:18.15.11"],\
             ["@types/yargs-parser", "npm:21.0.0"],\
             ["@typescript-eslint/eslint-plugin", "virtual:e4701b21c57d668a9f32792ae09af91ca2c9e5974303d21566e13f8d54df4a5ce05dd13aad1d58186b7def49e78e73a9ada2410c866b42710b4e27d4b231fa97#npm:5.58.0"],\
@@ -44,6 +45,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-jsdoc", "virtual:e4701b21c57d668a9f32792ae09af91ca2c9e5974303d21566e13f8d54df4a5ce05dd13aad1d58186b7def49e78e73a9ada2410c866b42710b4e27d4b231fa97#npm:41.1.1"],\
             ["fp-ts", "npm:2.11.8"],\
             ["io-ts", "virtual:1d3c0fc9c1487e6609cca319eab28df5a50487c0e12b1462abf6bfceb5c3b1fe7091b2eefcb1968ba40e1a3292bfe6df0ca91af8496b5d27aa34d62b3ea87a3c#npm:2.2.16"],\
+            ["lodash", "npm:4.17.21"],\
             ["prettier", "npm:2.8.7"],\
             ["ts-node", "virtual:e4701b21c57d668a9f32792ae09af91ca2c9e5974303d21566e13f8d54df4a5ce05dd13aad1d58186b7def49e78e73a9ada2410c866b42710b4e27d4b231fa97#npm:10.9.1"],\
             ["typescript", "patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=85af82"],\
@@ -599,6 +601,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@transcend-io/vz-cli", "workspace:."],\
             ["@transcend-io/cli", "npm:4.75.1"],\
+            ["@types/lodash", "npm:4.14.202"],\
             ["@types/node", "npm:18.15.11"],\
             ["@types/yargs-parser", "npm:21.0.0"],\
             ["@typescript-eslint/eslint-plugin", "virtual:e4701b21c57d668a9f32792ae09af91ca2c9e5974303d21566e13f8d54df4a5ce05dd13aad1d58186b7def49e78e73a9ada2410c866b42710b4e27d4b231fa97#npm:5.58.0"],\
@@ -614,6 +617,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-jsdoc", "virtual:e4701b21c57d668a9f32792ae09af91ca2c9e5974303d21566e13f8d54df4a5ce05dd13aad1d58186b7def49e78e73a9ada2410c866b42710b4e27d4b231fa97#npm:41.1.1"],\
             ["fp-ts", "npm:2.11.8"],\
             ["io-ts", "virtual:1d3c0fc9c1487e6609cca319eab28df5a50487c0e12b1462abf6bfceb5c3b1fe7091b2eefcb1968ba40e1a3292bfe6df0ca91af8496b5d27aa34d62b3ea87a3c#npm:2.2.16"],\
+            ["lodash", "npm:4.17.21"],\
             ["prettier", "npm:2.8.7"],\
             ["ts-node", "virtual:e4701b21c57d668a9f32792ae09af91ca2c9e5974303d21566e13f8d54df4a5ce05dd13aad1d58186b7def49e78e73a9ada2410c866b42710b4e27d4b231fa97#npm:10.9.1"],\
             ["typescript", "patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=85af82"],\
@@ -713,6 +717,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@types/keyv", "npm:3.1.3"],\
             ["@types/node", "npm:16.11.4"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/lodash", [\
+        ["npm:4.14.202", {\
+          "packageLocation": "./.yarn/cache/@types-lodash-npm-4.14.202-76de3e302b-a91acf3564.zip/node_modules/@types/lodash/",\
+          "packageDependencies": [\
+            ["@types/lodash", "npm:4.14.202"]\
           ],\
           "linkType": "HARD"\
         }]\
