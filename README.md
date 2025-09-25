@@ -5,7 +5,7 @@
 
 - [Overview](#overview)
 - [Installation](#installation)
-  - [Step 1) Install NPM, Node, and Yarn](#step-1-install-npm-node-and-yarn)
+  - [Step 1) Install Node and Yarn](#step-1-install-node-and-yarn)
   - [Step 2) Install @transcend-io/vz-cli and @transcend-io/cli](#step-2-install-transcend-iovz-cli-and-transcend-iocli)
   - [Step 3) Create a .env file to store secrets and common environment configuration](#step-3-create-a-env-file-to-store-secrets-and-common-environment-configuration)
   - [Step 4) Run commands](#step-4-run-commands)
@@ -51,9 +51,11 @@ A command line interface that allows you to define your Data Map in code and syn
 
 ## Installation
 
-### Step 1) Install NPM, Node, and Yarn
+### Step 1) Install Node and Yarn
 
-This package is distributed through npm and github package registries and assumes an installation of [npm and node](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm). You will also want to install [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable).
+This package is distributed through npm and github package registries and assumes an installation.
+
+It assumes NodeJS and [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable) are installed. Node can be installed in a variety of ways, here is [an example](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
 
 ### Step 2) Install @transcend-io/vz-cli and @transcend-io/cli
 
